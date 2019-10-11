@@ -1,0 +1,74 @@
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
+
+class Encryption {
+
+float[] alphabet1 = new float[64];
+float[] alphabet2 = new float[64];
+
+public void decrypt () throws Exception{
+
+int [] find = new int [64];
+FileInputStream file = new FileInputStream("C:/Users/maynk/IdeaProjects/SaladCaesar/NewSalad.txt");
+InputStreamReader text = new InputStreamReader(file,"UTF-8");
+int SizeFile = file.available();
+
+for (int i = 0; i<64;i++){
+alphabet1[i]=alphabet1[i]/SizeFile;
+alphabet2[i]=alphabet2[i]/SizeFile;
+}
+
+for (int i = 0; i<64;i++)
+for (int j = 0; j < 64; j++)
+if (alphabet2[i] == alphabet1[j]) find[i] = j;
+
+for (int h=0;h<64;h++) System.out.println(find[h]);
+FileWriter out = new FileWriter("C:/Users/maynk/IdeaProjects/SaladCaesar/NewSalad2.txt",false);
+int later=0;
+
+while ((later=text.read())!=-1) {
+// System.out.print((char)later);
+if (later >= 1040 & later <= 1103) {
+later =find[later-1040]+1040;
+}
+out.write(later);
+}
+
+text.close();
+file.close();
+out.close();
+
+}
+public void encrypt () throws Exception{
+int later =0;
+
+FileInputStream file = new FileInputStream("C:/Users/maynk/IdeaProjects/SaladCaesar/Salad.txt");
+InputStreamReader text = new InputStreamReader(file,"UTF-8");
+int SizeFile = file.available();
+
+FileWriter out = new FileWriter("C:/Users/maynk/IdeaProjects/SaladCaesar/NewSalad.txt",false);
+
+while ((later=text.read())!=-1){
+// System.out.print((char)later);
+if (later>=1040&later<=1103) {
+alphabet1[later - 1040]++;
+later += 7;
+if (later > 1103) later -= 64;
+alphabet2[later - 1040]++;
+}
+out.write(later);
+}
+text.close();
+file.close();
+out.close();
+}
+}
+
+public class Main {
+public static void main(String[] args) throws Exception {
+Encryption book = new Encryption();
+book.encrypt();
+book.decrypt();
+}
+}
